@@ -96,9 +96,9 @@ class TestWordPath(unittest.TestCase):
         word_path.populate_chain('cat', 'dog')
         self.assertListEqual(expected_dict, word_path.chain)
 
-    def test_find_return_correct_list_order(self):
+    def test_find_return_correct_list(self):
         """
-        Ensure that find method return the expected word path with correct order
+        Ensure that find method return the expected dict
         """
         expected_dict = ['cat', 'cag', 'cog', 'dog']
         file_text = '\n'.join(['dog', 'fog', 'zog', 'cat', 'cag', 'cog'])
@@ -107,6 +107,4 @@ class TestWordPath(unittest.TestCase):
         with mock.patch('wp.main.open', create_mock_open(file_text=file_text)):
             word_path.load_word_list('test', 3)
 
-        word_path.chain.append('cat')
-        word_path.populate_chain('cat', 'dog')
-        self.assertListEqual(expected_dict, word_path.chain)
+        self.assertListEqual(expected_dict, word_path.find('cat', 'dog'))
