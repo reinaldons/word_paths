@@ -17,7 +17,7 @@ class WordPath:
 
     def is_valid_diff(self, word1, word2):
         """
-        Both words can only have 1 different letter
+        Both words can only have 1 different letter between them
         """
         count = 0
         for a, b in zip(word1, word2):
