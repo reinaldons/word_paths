@@ -2,15 +2,22 @@
 
 import argparse
 
+from wp.exceptions import WordSizeException, WordNotInWordList
 from wp.main import WordPath
 
 
 def run(first_word, last_word):
     word_path = WordPath()
     word_path.load_word_list('tests/functional/misc/words', len(first_word))
-    chain = word_path.find(first_word, last_word)
 
-    print(' > '.join(chain))
+    try:
+        chain = word_path.find(first_word, last_word)
+        print(' > '.join(chain))
+    except WordNotInWordList as e:
+        print('{}. Ensure both words exists in the words file.'.format(e))
+    except WordSizeException as e:
+        print('{}.'.format(e))
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
