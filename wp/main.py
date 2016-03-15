@@ -18,7 +18,7 @@ class WordPath:
 
     def is_valid_diff(self, word1, word2):
         """
-        Both words can only have 1 different letter between them
+        Should have just 1 different letter between them
         """
         count = 0
         for a, b in zip(word1, word2):
@@ -31,7 +31,7 @@ class WordPath:
 
     def populate_chain(self, first_word, last_word):
         slice_index = self.word_list.index(first_word)
-        temp_word_list = self.word_list[slice_index:]
+        temp_word_list = self.word_list[slice_index:]  # slice to just look forward
         word1 = first_word
         for word in temp_word_list:
             if self.is_valid_diff(word1=word1, word2=word) and word not in self.chain:
