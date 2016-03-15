@@ -2,7 +2,7 @@
 
 Author: Reinaldo Nolasco Sanches
 
-Developed using Python 3.5.1. No addional modules required.
+Developed using Python 3.5.1. No additional modules required.
 
 ---
 
