@@ -2,7 +2,7 @@
 import unittest
 from unittest import mock
 
-from wp.exceptions import WordSizeException, WordNotInWordList
+from wp.exceptions import WordSizeException, WordNotInWordListException, ImpossiblePathException
 from wp.main import WordPath
 
 
@@ -67,8 +67,8 @@ class TestWordPath(unittest.TestCase):
         with mock.patch('wp.main.open', create_mock_open(file_text='\n'.join(['one', 'two', 'three']))):
             word_path.load_word_list('test', 3)
 
-        with self.assertRaises(WordSizeException):
-            word_path.find('zero', 'two')
+        with self.assertRaises(WordNotInWordListException):
+            word_path.find('two', 'six')
 
     def test_find_with_last_word_not_in_word_list(self):
         """
@@ -96,12 +96,25 @@ class TestWordPath(unittest.TestCase):
         word_path.populate_chain('cat', 'dog')
         self.assertListEqual(expected_dict, word_path.chain)
 
-    def test_find_return_correct_list(self):
+    def test_find_with_no_viable_path(self):
+        """
+        Ensure that find method raise an Exception when have no viable path between given words
+        """
+        file_text = '\n'.join(['aaa', 'cat', 'cog', 'dog', 'fog', 'zog'])
+
+        word_path = WordPath()
+        with mock.patch('wp.main.open', create_mock_open(file_text=file_text)):
+            word_path.load_word_list('test', 3)
+
+        with self.assertRaises(ImpossiblePathException):
+            word_path.find('cat', 'dog')
+
+    def test_find_with_viable_path(self):
         """
         Ensure that find method return the expected dict
         """
         expected_dict = ['cat', 'cag', 'cog', 'dog']
-        file_text = '\n'.join(['dog', 'fog', 'zog', 'cat', 'cag', 'cog'])
+        file_text = '\n'.join(['aaa', 'cat', 'cag', 'cog', 'caf', 'dog', 'fog', 'zog'])
 
         word_path = WordPath()
         with mock.patch('wp.main.open', create_mock_open(file_text=file_text)):

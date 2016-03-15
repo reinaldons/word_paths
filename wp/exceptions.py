@@ -4,5 +4,9 @@ class WordSizeException(Exception):
     pass
 
 
-class WordNotInWordList(Exception):
+class WordNotInWordListException(Exception):
+    pass
+
+
+class ImpossiblePathException(Exception):
     pass

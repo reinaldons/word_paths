@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-EXPECTED='cat > cag > cog > dog'
-OUTPUT=$(python wordpaths.py cat dog)
+EXPECTED='cat > caw > cay > coy > cry > dry > fry'
+OUTPUT=$(python wordpaths.py cat fry)
 
 if [ "$EXPECTED" == "$OUTPUT" ]; then
     echo "Output test OK"

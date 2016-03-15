@@ -1,5 +1,5 @@
 
-from .exceptions import WordSizeException, WordNotInWordList
+from .exceptions import WordSizeException, WordNotInWordListException, ImpossiblePathException
 
 
 class WordPath:
@@ -7,6 +7,7 @@ class WordPath:
     def __init__(self):
         self.word_list = []
         self.chain = []
+        self.complete_chain = False
 
     def load_word_list(self, file_path, word_size):
         with open(file_path) as file:
@@ -29,24 +30,31 @@ class WordPath:
         return count == 1
 
     def populate_chain(self, first_word, last_word):
-        for word in self.word_list:
-            if self.is_valid_diff(word1=word, word2=first_word) and word not in self.chain:
+        slice_index = self.word_list.index(first_word)
+        temp_word_list = self.word_list[slice_index:]
+        word1 = first_word
+        for word in temp_word_list:
+            if self.is_valid_diff(word1=word1, word2=word) and word not in self.chain:
                 self.chain.append(word)
                 if word == last_word:
+                    self.complete_chain = True
                     return
-                self.populate_chain(first_word=word, last_word=last_word)
+                word1 = word
 
     def find(self, first_word, last_word):
         if len(first_word) != len(last_word):
             raise WordSizeException('Words should have the same size')
 
         if not self.in_word_list(first_word):
-            raise WordNotInWordList('Word {} not in the word list'.format(first_word))
+            raise WordNotInWordListException('Word {} not in the word list'.format(first_word))
 
         if not self.in_word_list(last_word):
-            raise WordNotInWordList('Word {} not in the word list'.format(last_word))
+            raise WordNotInWordListException('Word {} not in the word list'.format(last_word))
 
         self.chain.append(first_word)
         self.populate_chain(first_word, last_word)
+
+        if not self.complete_chain:
+            raise ImpossiblePathException('{} and {} have no viable path between them'.format(first_word, last_word))
 
         return self.chain
